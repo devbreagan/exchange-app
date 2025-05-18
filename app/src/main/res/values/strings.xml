@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Exchange</string>
+    <string name="money_exchange_title">Money Exchange</string>
+    <string name="amount_to_send">Amount to Send</string>
+    <string name="amount_to_receive">Amount to Receive</string>
+    <string name="start_operation">Empieza tu operación</string>
+    <string name="buy_price">Buy Price: </string>
+    <string name="sell_price">Sell Price: </string>
+</resources>
