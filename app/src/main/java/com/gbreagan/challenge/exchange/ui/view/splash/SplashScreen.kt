@@ -19,7 +19,7 @@ import com.gbreagan.challenge.exchange.R
 
 @Composable
 fun SplashScreen(onSplashFinished: () -> Unit) {
-    val scale = remember { Animatable(0.7f) }
+    val scale = remember { Animatable(0.65f) }
 
     LaunchedEffect(Unit) {
         scale.animateTo(
