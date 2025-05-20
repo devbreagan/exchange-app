@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ExchangeTheme {
+            ExchangeTheme(dynamicColor = false) {
                 Surface {
                     val navController = rememberNavController()
                     Navigation(navController = navController)

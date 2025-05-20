@@ -1,9 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.kotlin.parcelize)
 }
+
+val localProperties = rootProject.file("local.properties")
+    .takeIf { it.exists() }
+    ?.inputStream()
+    ?.use { Properties().apply { load(it) } }
+val apiKey = localProperties?.getProperty("API_KEY") ?: ""
 
 android {
     namespace = "com.gbreagan.challenge.exchange"
@@ -22,6 +30,10 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -29,6 +41,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "API_URL", "\"https://api.exchangeratesapi.io/v1/\"")
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        }
+        debug {
+            buildConfigField("String", "API_URL", "\"https://api.exchangeratesapi.io/v1/\"")
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
         }
     }
     compileOptions {

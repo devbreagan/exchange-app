@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Exchange</string>
-    <string name="home_title">Money Exchange</string>
+    <string name="title_home">Money Exchange</string>
+    <string name="title_option">Divisas</string>
+    <string name="action_back">Atrás</string>
     <string name="amount_to_send">Lo que envías</string>
     <string name="amount_to_receive">Lo que recibes</string>
     <string name="start_operation">Empieza tu operación</string>
