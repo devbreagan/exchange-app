@@ -32,6 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OptionScreen(
+    source: String,
     onItemSelected: (String, String) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -79,7 +80,9 @@ fun OptionScreen(
                             Text(
                                 text = "${item.code}: ${item.name}",
                                 modifier = Modifier
-                                    .clickable { onItemSelected(item.code, "") }
+                                    .clickable {
+                                        onItemSelected(source, item.code)
+                                    }
                                     .fillMaxWidth()
                                     .padding(16.dp)
                             )

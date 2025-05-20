@@ -1,6 +1,9 @@
 package com.gbreagan.challenge.exchange.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,45 +17,55 @@ import kotlinx.serialization.Serializable
 fun Navigation(
     navController: NavHostController
 ) {
+    val selectedOptions = remember { mutableStateMapOf<String, String>() }
+
     NavHost(navController, startDestination = Screen.Splash) {
         composable<Screen.Splash> {
-            SplashScreen(
-                onSplashFinished = {
-                    navController.navigate(Screen.Home("","")) {
-                        popUpTo(Screen.Splash) { inclusive = true }
-                    }
+            SplashScreen(onSplashFinished = {
+                navController.navigate(Screen.Home) {
+                    popUpTo(Screen.Splash) { inclusive = true }
                 }
-            )
+            })
         }
-        composable<Screen.Home>() { entry ->
-            val arguments = entry.toRoute<Screen.Home>()
+        composable<Screen.Home> { entry ->
+            val navEntry = remember { navController.currentBackStackEntry }
+            val savedStateHandle = navEntry?.savedStateHandle
 
-            HomeScreen(
-                onSelectCurrency = {
-                    navController.navigate(Screen.Option)
-                },
-                sendCurrency = arguments.sendCurrency,
-                receiveCurrency = arguments.receiveCurrency
-            )
-        }
-        composable<Screen.Option> {
-            OptionScreen(
-                onItemSelected = { a, b ->
-                    navController.navigate(Screen.Home("", "")) {
-                        popUpTo(Screen.Home) { inclusive = true }
+            LaunchedEffect(Unit) {
+                savedStateHandle?.getLiveData<Pair<String, String>>("selected_option")
+                    ?.observeForever { (source, selectedItem) ->
+                        selectedOptions[source] = selectedItem
+                        savedStateHandle.remove<Pair<String, String>>("selected_option")
                     }
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
+            }
+
+            HomeScreen(selectedOptions = selectedOptions, onSelectCurrency = {
+                navController.navigate(Screen.Option(it))
+            })
+        }
+        composable<Screen.Option> { entry ->
+            val arguments = entry.toRoute<Screen.Option>()
+            OptionScreen(source = arguments.source, onItemSelected = { source, value ->
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                        "selected_option",
+                        Pair(source, value)
+                    )
+                navController.popBackStack()
+            }, onBackClick = {
+                navController.popBackStack()
+            })
         }
     }
 }
 
 @Serializable
 sealed interface Screen {
-    @Serializable data object Splash : Screen
-    @Serializable data class Home(val sendCurrency: String, val receiveCurrency: String) : Screen
-    @Serializable data object Option : Screen
+    @Serializable
+    data object Splash : Screen
+
+    @Serializable
+    data object Home : Screen
+
+    @Serializable
+    data class Option(val source: String) : Screen
 }

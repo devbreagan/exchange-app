@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,8 +39,7 @@ import com.gbreagan.challenge.exchange.ui.theme.ExchangeTheme
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onSelectCurrency: (String) -> Unit,
-    sendCurrency: String = "PEN",
-    receiveCurrency: String = "USD",
+    selectedOptions: Map<String, String>
 ) {
     var amountToSend by remember { mutableStateOf("") }
     var amountToReceive by remember { mutableStateOf("") }
@@ -84,8 +84,8 @@ fun HomeScreen(
         ) {
             Column {
                 OutlinedTextField(
-                    value = amountToReceive,
-                    onValueChange = { amountToReceive = it },
+                    value = amountToSend,
+                    onValueChange = { amountToSend = it },
                     label = { Text(stringResource(id = R.string.amount_to_receive)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
@@ -95,13 +95,13 @@ fun HomeScreen(
             Column {
                 BankButton(
                     onLongClick = {
-                        onSelectCurrency("SOURCE")
+                        onSelectCurrency(HomeConstants.SOURCE_CURRENCY_SEND)
                     },
                     modifier = Modifier
                         .width(100.dp)
                         .height(56.dp),
                 ) {
-                    Text(text = sendCurrency, color = Color.White)
+                    Text(text = selectedOptions[HomeConstants.SOURCE_CURRENCY_SEND] ?: "-", color = Color.White)
                 }
             }
         }
@@ -113,8 +113,8 @@ fun HomeScreen(
         ) {
             Column {
                 OutlinedTextField(
-                    value = amountToSend,
-                    onValueChange = { amountToSend = it },
+                    value = amountToReceive,
+                    onValueChange = { amountToReceive = it },
                     label = { Text(stringResource(id = R.string.amount_to_send)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
@@ -125,13 +125,13 @@ fun HomeScreen(
             Column {
                 BankButton(
                     onLongClick = {
-                        onSelectCurrency("TARGET")
+                        onSelectCurrency(HomeConstants.SOURCE_CURRENCY_RECEIVE)
                     },
                     modifier = Modifier
                         .width(100.dp)
                         .height(56.dp)
                 ) {
-                    Text(text = receiveCurrency, color = Color.White)
+                    Text(text = selectedOptions[HomeConstants.SOURCE_CURRENCY_RECEIVE] ?: "-", color = Color.White)
                 }
             }
         }
@@ -151,8 +151,9 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
     ExchangeTheme(dynamicColor = false) {
-        HomeScreen(
-            onSelectCurrency = {}
-        )
+//        HomeScreen(
+//
+//            onSelectCurrency = {}
+//        )
     }
 }
