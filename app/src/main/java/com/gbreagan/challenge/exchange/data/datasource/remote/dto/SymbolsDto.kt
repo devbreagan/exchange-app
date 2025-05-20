@@ -1,4 +1,4 @@
-package com.gbreagan.challenge.exchange.data.dto
+package com.gbreagan.challenge.exchange.data.datasource.remote.dto
 
 import com.google.gson.annotations.SerializedName
 

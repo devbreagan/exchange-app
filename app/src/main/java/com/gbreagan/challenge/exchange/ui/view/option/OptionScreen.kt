@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gbreagan.challenge.exchange.R
 import com.gbreagan.challenge.exchange.core.result.ResultData
+import com.gbreagan.challenge.exchange.ui.component.BankCard
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +41,7 @@ fun OptionScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
-        modifier = Modifier.testTag("DetailScreen"),
+        modifier = Modifier.testTag("OptionScreen"),
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -77,15 +78,12 @@ fun OptionScreen(
                     val rates = (uiState as ResultData.Success).data
                     LazyColumn {
                         itemsIndexed(rates) { _, item ->
-                            Text(
-                                text = "${item.code}: ${item.name}",
-                                modifier = Modifier
-                                    .clickable {
-                                        onItemSelected(source, item.code)
-                                    }
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            )
+                            BankCard(
+                                label = item.name,
+                                primaryText = "${item.code} = ${item.rate}",
+                            ) {
+                                onItemSelected(source, item.code)
+                            }
                         }
                     }
                 }

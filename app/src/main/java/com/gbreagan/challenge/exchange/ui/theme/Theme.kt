@@ -10,6 +10,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -56,4 +59,36 @@ fun ExchangeTheme(
         typography = Typography,
         content = content
     )
+}
+
+object BankStyles {
+    val colorPositive: Color = Color(0xFF00B407)
+    val colorNegative: Color = Color(0xFFFF0000)
+
+    @Composable
+    fun textDefault() = TextStyle(
+        fontSize = 20.sp,
+        lineHeight = 22.sp,
+        fontWeight = FontWeight.W600
+    )
+    @Composable
+    fun textBodySmall() = MaterialTheme.typography.bodySmall
+    @Composable
+    fun textBodyMedium() = MaterialTheme.typography.bodyMedium
+    @Composable
+    fun textBodyLarge() = MaterialTheme.typography.bodyLarge
+
+    @Composable
+    fun textTitleSmall() = MaterialTheme.typography.titleSmall
+    @Composable
+    fun textTitleMedium() = MaterialTheme.typography.titleMedium
+    @Composable
+    fun textTitleLarge() = MaterialTheme.typography.titleLarge
+
+    @Composable
+    fun textHeadSmall() = MaterialTheme.typography.headlineSmall
+    @Composable
+    fun textHeadMedium() = MaterialTheme.typography.headlineMedium
+    @Composable
+    fun textHeadLarge() = MaterialTheme.typography.headlineLarge
 }

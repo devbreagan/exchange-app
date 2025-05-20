@@ -1,7 +1,7 @@
 package com.gbreagan.challenge.exchange.di
 
 import com.gbreagan.challenge.exchange.BuildConfig
-import com.gbreagan.challenge.exchange.data.remote.ExchangeApiService
+import com.gbreagan.challenge.exchange.data.datasource.remote.ExchangeApiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
