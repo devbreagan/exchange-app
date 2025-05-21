@@ -5,6 +5,7 @@ import com.gbreagan.challenge.exchange.data.datasource.local.ExchangeLocalDataSo
 import com.gbreagan.challenge.exchange.data.datasource.local.entity.SymbolsEntity
 import com.gbreagan.challenge.exchange.data.datasource.remote.ExchangeRemoteDataSource
 import com.gbreagan.challenge.exchange.data.datasource.remote.dto.ExchangeRateDto
+import com.gbreagan.challenge.exchange.data.mapper.toCurrencyInfoList
 import com.gbreagan.challenge.exchange.domain.model.CurrencyInfo
 import com.gbreagan.challenge.exchange.domain.repository.ExchangeRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,11 +21,7 @@ class ExchangeRepositoryImpl(
         try {
             val symbolsEntity: List<SymbolsEntity> = localDataSource.getSymbols()
             val ratesDto: ExchangeRateDto = remoteDataSource.getRates()
-            val exchangeRates = symbolsEntity.mapNotNull {
-                ratesDto.rates[it.code]?.let { rate ->
-                    CurrencyInfo(it.code, it.name, rate)
-                }
-            }
+            val exchangeRates = symbolsEntity.toCurrencyInfoList(ratesDto)
             emit(ResultData.Success(exchangeRates))
         } catch (e: Exception) {
             emit(ResultData.Failure(e))

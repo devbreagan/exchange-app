@@ -5,7 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gbreagan.challenge.exchange.core.result.ResultData
-import com.gbreagan.challenge.exchange.data.orZero
+import com.gbreagan.challenge.exchange.data.isValidDecimal
+import com.gbreagan.challenge.exchange.data.toTwoDecimalString
 import com.gbreagan.challenge.exchange.domain.usecase.ConvertCurrencyUseCase
 import com.gbreagan.challenge.exchange.domain.usecase.GetCurrenciesInfoUseCase
 import kotlinx.coroutines.launch
@@ -24,19 +25,38 @@ class HomeViewModel(
                     is ResultData.Success -> {
                         _uiState.value = HomeUiState(
                             amountToSend = _uiState.value.amountToSend,
-                            amountToReceive = convertCurrencyUseCase(from, to, _uiState.value.amountToSend.orZero(), it.data),
+                            amountToReceive = convertCurrencyUseCase(
+                                from = from,
+                                to = to,
+                                amount = _uiState.value.amountToSend.toDouble(),
+                                rates = it.data
+                            ).toTwoDecimalString(),
                         )
                     }
-                    is ResultData.Failure -> {}
-                    is ResultData.Loading -> {}
+                    is ResultData.Failure -> {
+                        _uiState.value = HomeUiState(error = it.exception.message.toString())
+                    }
+                    is ResultData.Loading -> {
+                        _uiState.value = _uiState.value.copy(isLoading = true)
+                    }
                 }
             }
         }
     }
 
     fun onAmountSendChange(amount: String) {
-        _uiState.value = _uiState.value.copy(
-            amountToSend = amount.toDouble()
-        )
+        if (amount.isValidDecimal()) {
+            _uiState.value = _uiState.value.copy(
+                amountToSend = amount
+            )
+        }
+    }
+
+    fun onAmountReceiveChange(amount: String) {
+        if (amount.isValidDecimal()) {
+            _uiState.value = _uiState.value.copy(
+                amountToReceive = amount
+            )
+        }
     }
 }
