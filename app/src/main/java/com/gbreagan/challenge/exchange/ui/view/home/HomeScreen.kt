@@ -59,9 +59,7 @@ fun HomeScreen(
             modifier = Modifier
                 .size(96.dp)
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -143,6 +141,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            enabled = uiState.amountToSend.isNotBlank(),
             shape = RoundedCornerShape(8.dp)
         ) {
             if (uiState.isLoading) {
