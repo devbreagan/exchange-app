@@ -6,7 +6,7 @@ data class CurrencyInfo(
     val rate: Double
 )
 
-data class Symbols(
+data class CurrencyRate(
     val code: String,
-    val name: String,
+    val rate: String,
 )

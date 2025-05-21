@@ -15,9 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = BankOrange,
+    secondary = BlueGrey,
+    tertiary = SkyBlue,
+    onPrimary = BankOrange
+
 )
 
 private val LightColorScheme = lightColorScheme(

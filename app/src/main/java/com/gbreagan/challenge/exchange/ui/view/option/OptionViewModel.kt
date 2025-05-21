@@ -17,17 +17,16 @@ class OptionViewModel(
         getCurrenciesInfoUseCase()
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
+                started = SharingStarted.WhileSubscribed(10000),
                 initialValue = ResultData.Loading
             )
-
+}
 //    val uiState = getCurrenciesInfoUseCase()
 //        .map { result ->
 //            when (result) {
 //                is ResultData.Loading -> OptionUiState(isLoading = true)
-//                is ResultData.Success -> OptionUiState(recipes = result.data)
+//                is ResultData.Success -> OptionUiState(options = result.data)
 //                is ResultData.Failure -> OptionUiState(error = "Error al cargar datos")
 //            }
 //        }
 //        .stateIn(viewModelScope, SharingStarted.Eagerly, OptionUiState())
-}

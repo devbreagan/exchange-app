@@ -1,11 +1,10 @@
-package com.gbreagan.challenge.exchange.data.datasource.local
+package com.gbreagan.challenge.exchange.data.datasource.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.gbreagan.challenge.exchange.data.datasource.local.entity.SymbolsEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SymbolDao {

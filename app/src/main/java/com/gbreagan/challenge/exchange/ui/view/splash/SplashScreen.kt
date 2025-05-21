@@ -1,7 +1,10 @@
 package com.gbreagan.challenge.exchange.ui.view.splash
 
+import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -22,6 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gbreagan.challenge.exchange.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -29,19 +34,22 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     val viewModel: SplashViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) { viewModel.loadData() }
-
     Scaffold {
         Column(modifier = Modifier.padding(it)) {
             when (uiState) {
                 is SplashUiState.Loading -> {
-                    LogoAnimation(onSplashFinished)
+                    LaunchedEffect(Unit) { viewModel.loadData() }
+                    LogoAnimation()
                 }
                 is SplashUiState.Error -> {
-                    LogoAnimation(onSplashFinished)
+                    LaunchedEffect(Unit) {
+                        onSplashFinished()
+                    }
                 }
                 is SplashUiState.Success -> {
-
+                    LaunchedEffect(Unit) {
+                        onSplashFinished()
+                    }
                 }
             }
         }
@@ -49,19 +57,16 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 }
 
 @Composable
-private fun LogoAnimation(
-    onSplashFinished: () -> Unit
-) {
-    val scale = remember { Animatable(0.65f) }
+private fun LogoAnimation() {
+    val scale = remember { Animatable(1f) }
     LaunchedEffect(Unit) {
         scale.animateTo(
-            targetValue = 1.5f,
-            animationSpec = tween(
-                durationMillis = SplashConstants.SPLASH_DURATION_MS,
-                easing = LinearEasing
+            targetValue = 1.2f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 800, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
             )
         )
-        onSplashFinished()
     }
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -71,7 +76,7 @@ private fun LogoAnimation(
             painter = painterResource(id = R.drawable.illustration_moneybag),
             contentDescription = stringResource(id = R.string.app_name),
             modifier = Modifier
-                .size(200.dp)
+                .size(128.dp)
                 .graphicsLayer(
                     scaleX = scale.value,
                     scaleY = scale.value

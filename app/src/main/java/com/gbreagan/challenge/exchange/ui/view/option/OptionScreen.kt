@@ -3,6 +3,7 @@ package com.gbreagan.challenge.exchange.ui.view.option
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.gbreagan.challenge.exchange.R
 import com.gbreagan.challenge.exchange.core.result.ResultData
 import com.gbreagan.challenge.exchange.ui.component.BankCard
+import com.gbreagan.challenge.exchange.ui.component.BankErrorPage
+import com.gbreagan.challenge.exchange.ui.component.BankLoader
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,17 +69,17 @@ fun OptionScreen(
         ) {
             when (uiState) {
                 is ResultData.Loading -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    BankLoader()
                 }
                 is ResultData.Success -> {
                     val rates = (uiState as ResultData.Success).data
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentPadding = PaddingValues(vertical = 4.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
                         itemsIndexed(rates) { _, item ->
                             BankCard(
                                 label = item.name,
@@ -88,13 +91,7 @@ fun OptionScreen(
                     }
                 }
                 is ResultData.Failure -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text("Error al cargar datos")
-                    }
+                    BankErrorPage()
                 }
             }
         }

@@ -17,18 +17,18 @@ class SplashViewModel(
     val uiState: StateFlow<SplashUiState> = _uiState.asStateFlow()
     fun loadData() {
         viewModelScope.launch {
+            delay(SplashConstants.SPLASH_DELAY_MS)
             _uiState.value = SplashUiState.Loading
             saveSymbolsUseCase().collect {
                 when (it) {
                     is ResultData.Success -> {
-                        delay(SplashConstants.SPLASH_DELAY_MS)
+                        //delay(SplashConstants.SPLASH_DELAY_MS)
                         _uiState.value = SplashUiState.Success
                     }
                     is ResultData.Failure -> {
                         _uiState.value = SplashUiState.Error(it.exception.message.toString())
                     }
-
-                    ResultData.Loading -> SplashUiState.Loading
+                    is ResultData.Loading -> SplashUiState.Loading
                 }
             }
         }

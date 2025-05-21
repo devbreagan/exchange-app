@@ -10,3 +10,4 @@ fun Context.loadJsonFromAsset(fileName: String): String? {
         null
     }
 }
+fun Double?.orZero(): Double = this ?: 0.0

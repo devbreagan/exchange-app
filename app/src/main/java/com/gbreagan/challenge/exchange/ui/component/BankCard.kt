@@ -35,7 +35,7 @@ fun BankCard(
             .fillMaxWidth()
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(0.dp)
+        shape = RoundedCornerShape(8.dp)
     ) {
         Row(
             modifier = Modifier
@@ -54,11 +54,11 @@ fun BankCard(
             Column {
                 Text(
                     text = label,
-                    style = BankStyles.textTitleMedium()
+                    style = BankStyles.textBodyLarge()
                 )
                 Text(
                     text = primaryText,
-                    style = BankStyles.textBodyMedium()
+                    style = BankStyles.textTitleMedium()
                 )
             }
         }

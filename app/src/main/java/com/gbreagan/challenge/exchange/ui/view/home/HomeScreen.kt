@@ -14,11 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,8 +30,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gbreagan.challenge.exchange.R
+import com.gbreagan.challenge.exchange.data.orZero
 import com.gbreagan.challenge.exchange.ui.component.BankButton
 import com.gbreagan.challenge.exchange.ui.theme.ExchangeTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
@@ -41,11 +41,11 @@ fun HomeScreen(
     onSelectCurrency: (String) -> Unit,
     selectedOptions: Map<String, String>
 ) {
-    var amountToSend by remember { mutableStateOf("") }
-    var amountToReceive by remember { mutableStateOf("") }
-    var selectedCurrency by remember { mutableStateOf("Soles") }
-    val exchangeRateBuy = 3.5
-    val exchangeRateSell = 3.6
+    val viewModel: HomeViewModel = koinViewModel()
+    val uiState by viewModel.uiState
+    var amountToReceive by remember { mutableStateOf("${uiState.amountToReceive.orZero()}") }
+    val selectedCurrencySend by remember { mutableStateOf(selectedOptions[HomeConstants.SOURCE_CURRENCY_SEND].orEmpty()) }
+    val selectedCurrencyReceive by remember { mutableStateOf(selectedOptions[HomeConstants.SOURCE_CURRENCY_RECEIVE].orEmpty()) }
 
     Column(
         modifier = modifier
@@ -63,19 +63,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row {
-            Text(
-                text = stringResource(id = R.string.buy_price) + exchangeRateBuy + " | ",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                text = stringResource(id = R.string.sell_price) + exchangeRateSell,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -84,12 +71,12 @@ fun HomeScreen(
         ) {
             Column {
                 OutlinedTextField(
-                    value = amountToSend,
-                    onValueChange = { amountToSend = it },
-                    label = { Text(stringResource(id = R.string.amount_to_receive)) },
+                    value = uiState.amountToSend.orZero().toString(),
+                    onValueChange = {viewModel.onAmountSendChange(it) },
+                    label = { Text(stringResource(id = R.string.amount_to_send)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
-                    shape = RoundedCornerShape(0.dp)
+                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 0.dp, bottomStart = 8.dp, bottomEnd = 0.dp)
                 )
             }
             Column {
@@ -101,10 +88,11 @@ fun HomeScreen(
                         .width(100.dp)
                         .height(56.dp),
                 ) {
-                    Text(text = selectedOptions[HomeConstants.SOURCE_CURRENCY_SEND] ?: "-", color = Color.White)
+                    Text(text = selectedCurrencySend, color = Color.White)
                 }
             }
         }
+        Spacer(modifier = Modifier.height(4.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -113,13 +101,13 @@ fun HomeScreen(
         ) {
             Column {
                 OutlinedTextField(
-                    value = amountToReceive,
+                    value = uiState.amountToReceive.toString(),
                     onValueChange = { amountToReceive = it },
                     label = { Text(stringResource(id = R.string.amount_to_send)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
                     readOnly = true,
-                    shape = RoundedCornerShape(0.dp)
+                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 0.dp, bottomStart = 8.dp, bottomEnd = 0.dp)
                 )
             }
             Column {
@@ -131,17 +119,19 @@ fun HomeScreen(
                         .width(100.dp)
                         .height(56.dp)
                 ) {
-                    Text(text = selectedOptions[HomeConstants.SOURCE_CURRENCY_RECEIVE] ?: "-", color = Color.White)
+                    Text(text = selectedCurrencyReceive, color = Color.White)
                 }
             }
         }
         Spacer(modifier = Modifier.height(32.dp))
         Button(
-            onClick = { selectedCurrency = if (selectedCurrency == "Soles") "Dollars" else "Soles" },
+            onClick = {
+                viewModel.convertCurrency(selectedCurrencySend, selectedCurrencyReceive)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            shape = RoundedCornerShape(0.dp)
+            shape = RoundedCornerShape(8.dp)
         ) {
             Text(stringResource(id = R.string.start_operation), color = Color.White)
         }
@@ -152,7 +142,6 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     ExchangeTheme(dynamicColor = false) {
 //        HomeScreen(
-//
 //            onSelectCurrency = {}
 //        )
     }
