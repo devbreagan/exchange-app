@@ -10,7 +10,6 @@ import com.gbreagan.challenge.exchange.data.toTwoDecimalString
 import com.gbreagan.challenge.exchange.domain.usecase.ConvertCurrencyUseCase
 import com.gbreagan.challenge.exchange.domain.usecase.GetCurrenciesInfoUseCase
 import com.gbreagan.challenge.exchange.domain.usecase.SaveOperationUseCase
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel(

@@ -5,12 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gbreagan.challenge.exchange.core.result.ResultData
-import com.gbreagan.challenge.exchange.data.toTwoDecimalString
 import com.gbreagan.challenge.exchange.domain.usecase.GetOperationsUseCase
-import com.gbreagan.challenge.exchange.ui.view.option.OptionUiState
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
