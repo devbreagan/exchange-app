@@ -4,14 +4,13 @@ import com.gbreagan.challenge.exchange.core.dispatcher.DispatcherProvider
 import com.gbreagan.challenge.exchange.core.result.ResultData
 import com.gbreagan.challenge.exchange.domain.model.Operation
 import com.gbreagan.challenge.exchange.domain.repository.ExchangeRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 class GetOperationsUseCase(
     private val repository: ExchangeRepository,
     private val dispatcher: DispatcherProvider
 ) {
-    operator fun invoke(): Flow<ResultData<List<Operation>>> {
-        return repository.getOperations().flowOn(dispatcher.io)
+    suspend operator fun invoke(): ResultData<List<Operation>> = withContext(dispatcher.io) {
+        repository.getOperations()//.flowOn(dispatcher.io)
     }
 }

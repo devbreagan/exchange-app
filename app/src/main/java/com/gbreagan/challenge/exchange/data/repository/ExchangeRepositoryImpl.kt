@@ -31,44 +31,35 @@ class ExchangeRepositoryImpl(
         }
     }
 
-    override fun setSymbolsToLocal(): Flow<ResultData<Boolean>> = flow {
-        emit(ResultData.Loading)
-        try {
+    override suspend fun setSymbolsToLocal(): ResultData<Boolean> {
+        return try {
             val symbolsEntity: List<SymbolsEntity> =
                 remoteDataSource.getSymbols().symbols.mapNotNull {
                     SymbolsEntity(code = it.key, name = it.value)
                 }
             localDataSource.saveSymbols(symbolsEntity)
-            emit(ResultData.Success(true))
+            ResultData.Success(true)
         } catch (e: Exception) {
-            emit(ResultData.Failure(e))
+            ResultData.Failure(e)
         }
-    }.catch {
-        emit(ResultData.Failure(it))
     }
 
-    override fun saveOperation(operation: Operation): Flow<ResultData<Boolean>> = flow {
-        emit(ResultData.Loading)
-        try {
+
+    override suspend fun saveOperation(operation: Operation): ResultData<Boolean> {
+        return try {
             localDataSource.saveOperation(operation.toEntity())
-            emit(ResultData.Success(true))
+            ResultData.Success(true)
         } catch (e: Exception) {
-            emit(ResultData.Failure(e))
+            ResultData.Failure(e)
         }
-    }.catch {
-        emit(ResultData.Failure(it))
     }
 
-    override fun getOperations(): Flow<ResultData<List<Operation>>> = flow {
-        emit(ResultData.Loading)
-        try {
+    override suspend fun getOperations(): ResultData<List<Operation>> {
+        return try {
             val operations = localDataSource.getOperations().map { it.toModel() }
-            Log.d("getOperations", operations.toString())
-            emit(ResultData.Success(operations))
+            ResultData.Success(operations)
         } catch (e: Exception) {
-            emit(ResultData.Failure(e))
+            ResultData.Failure(e)
         }
-    }.catch {
-        emit(ResultData.Failure(it))
     }
 }

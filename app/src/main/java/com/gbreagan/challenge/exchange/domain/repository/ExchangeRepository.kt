@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRepository {
     suspend fun getCurrencyInfoList(): ResultData<List<CurrencyInfo>>
-    fun setSymbolsToLocal(): Flow<ResultData<Boolean>>
-    fun saveOperation(operation: Operation): Flow<ResultData<Boolean>>
-    fun getOperations(): Flow<ResultData<List<Operation>>>
+    suspend fun setSymbolsToLocal(): ResultData<Boolean>
+    suspend fun saveOperation(operation: Operation): ResultData<Boolean>
+    suspend fun getOperations(): ResultData<List<Operation>>
 }

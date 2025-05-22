@@ -8,18 +8,19 @@ import com.gbreagan.challenge.exchange.domain.model.Operation
 import com.gbreagan.challenge.exchange.domain.repository.ExchangeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 class SaveOperationUseCase(
     private val repository: ExchangeRepository,
     private val dispatcher: DispatcherProvider
 ) {
-    operator fun invoke(
+    suspend operator fun invoke(
         amountSend: Double,
         amountReceive: Double,
         from: String,
         to: String
-    ): Flow<ResultData<Boolean>> {
+    ): ResultData<Boolean> = withContext(dispatcher.io) {
         val operation = Operation(amountSend, amountReceive, from, to, currentLongTimestamp())
-        return repository.saveOperation(operation).flowOn(dispatcher.io)
+        repository.saveOperation(operation)//.flowOn(dispatcher.io)
     }
 }

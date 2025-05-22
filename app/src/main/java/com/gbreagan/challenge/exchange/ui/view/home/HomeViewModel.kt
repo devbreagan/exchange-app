@@ -47,7 +47,7 @@ class HomeViewModel(
                             amountReceive = converted,
                             from = from,
                             to = to
-                        ).collect()
+                        )
                     }
                     _uiState.value = HomeUiState(
                         amountToSend = _uiState.value.amountToSend,

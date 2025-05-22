@@ -32,7 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SplashScreen(onSplashFinished: () -> Unit) {
     val viewModel: SplashViewModel = koinViewModel()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState//.collectAsStateWithLifecycle()
 
     Scaffold {
         Column(modifier = Modifier.padding(it)) {
