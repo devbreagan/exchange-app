@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.gbreagan.challenge.exchange.ui.view.detail.DetailScreen
 import com.gbreagan.challenge.exchange.ui.view.home.HomeScreen
 import com.gbreagan.challenge.exchange.ui.view.option.OptionScreen
 import com.gbreagan.challenge.exchange.ui.view.splash.SplashScreen
@@ -32,30 +33,47 @@ fun Navigation(
             val savedStateHandle = navEntry?.savedStateHandle
 
             LaunchedEffect(Unit) {
-                savedStateHandle?.getLiveData<Pair<String, String>>("selected_option")
+                savedStateHandle?.getLiveData<Pair<String, String>>(NavConstants.SELECTED_OPTION)
                     ?.observeForever { (source, selectedItem) ->
                         selectedOptions[source] = selectedItem
-                        savedStateHandle.remove<Pair<String, String>>("selected_option")
+                        savedStateHandle.remove<Pair<String, String>>(NavConstants.SELECTED_OPTION)
                     }
             }
 
-            HomeScreen(selectedOptions = selectedOptions, onSelectCurrency = {
-                navController.navigate(Screen.Option(it))
-            })
+            HomeScreen(
+                selectedOptions = selectedOptions,
+                onSelectCurrency = {
+                    navController.navigate(Screen.Option(it))
+                },
+                onDetailScreen = {
+                    navController.navigate(Screen.Detail)
+                }
+            )
         }
         composable<Screen.Option> { entry ->
             val arguments = entry.toRoute<Screen.Option>()
             OptionScreen(source = arguments.source, onItemSelected = { source, value ->
                 navController.previousBackStackEntry?.savedStateHandle?.set(
-                        "selected_option",
-                        Pair(source, value)
-                    )
+                    NavConstants.SELECTED_OPTION,
+                    Pair(source, value)
+                )
                 navController.popBackStack()
-            }, onBackClick = {
+            }, onBackPressed = {
                 navController.popBackStack()
             })
         }
+        composable<Screen.Detail> {
+            DetailScreen(
+                onBackPressed = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
+}
+
+object NavConstants {
+    const val SELECTED_OPTION = "selected_option"
 }
 
 @Serializable
@@ -68,4 +86,7 @@ sealed interface Screen {
 
     @Serializable
     data class Option(val source: String) : Screen
+
+    @Serializable
+    data object Detail : Screen
 }

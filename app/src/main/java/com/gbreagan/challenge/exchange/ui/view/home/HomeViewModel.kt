@@ -9,11 +9,14 @@ import com.gbreagan.challenge.exchange.data.isValidDecimal
 import com.gbreagan.challenge.exchange.data.toTwoDecimalString
 import com.gbreagan.challenge.exchange.domain.usecase.ConvertCurrencyUseCase
 import com.gbreagan.challenge.exchange.domain.usecase.GetCurrenciesInfoUseCase
+import com.gbreagan.challenge.exchange.domain.usecase.SaveOperationUseCase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
-    private val getCurrenciesInfoUseCase: GetCurrenciesInfoUseCase
+    private val getCurrenciesInfoUseCase: GetCurrenciesInfoUseCase,
+    private val saveOperationUseCase: SaveOperationUseCase,
 ) : ViewModel() {
     private val _uiState = mutableStateOf(HomeUiState())
     val uiState: MutableState<HomeUiState> = _uiState
@@ -23,21 +26,34 @@ class HomeViewModel(
             getCurrenciesInfoUseCase().collect {
                 when (it) {
                     is ResultData.Success -> {
+                        val converted = convertCurrencyUseCase(
+                            from = from,
+                            to = to,
+                            amount = _uiState.value.amountToSend.toDouble(),
+                            rates = it.data
+                        )
+                        _uiState.value = _uiState.value.copy(
+                            amountToReceive = converted.toTwoDecimalString(),
+                            isLoading = false
+                        )
+                        if (converted != null) {
+                            saveOperationUseCase(
+                                amountSend = _uiState.value.amountToSend.toDouble(),
+                                amountReceive = converted,
+                                from = from,
+                                to = to
+                            ).collect()
+                        }
                         _uiState.value = HomeUiState(
                             amountToSend = _uiState.value.amountToSend,
-                            amountToReceive = convertCurrencyUseCase(
-                                from = from,
-                                to = to,
-                                amount = _uiState.value.amountToSend.toDouble(),
-                                rates = it.data
-                            ).toTwoDecimalString(),
+                            amountToReceive = converted.toTwoDecimalString(),
                         )
                     }
                     is ResultData.Failure -> {
                         _uiState.value = HomeUiState(error = it.exception.message.toString())
                     }
                     is ResultData.Loading -> {
-                        _uiState.value = _uiState.value.copy(isLoading = true)
+                        //_uiState.value = _uiState.value.copy(isLoading = true)
                     }
                 }
             }

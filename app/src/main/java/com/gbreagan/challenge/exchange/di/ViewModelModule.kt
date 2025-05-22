@@ -1,5 +1,6 @@
 package com.gbreagan.challenge.exchange.di
 
+import com.gbreagan.challenge.exchange.ui.view.detail.DetailViewModel
 import com.gbreagan.challenge.exchange.ui.view.home.HomeViewModel
 import com.gbreagan.challenge.exchange.ui.view.option.OptionViewModel
 import com.gbreagan.challenge.exchange.ui.view.splash.SplashViewModel
@@ -8,6 +9,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { SplashViewModel(get()) }
-    viewModel { HomeViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { OptionViewModel(get()) }
+    viewModel { DetailViewModel(get()) }
 }

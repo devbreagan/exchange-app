@@ -13,20 +13,29 @@ import kotlinx.coroutines.flow.stateIn
 class OptionViewModel(
     private val getCurrenciesInfoUseCase: GetCurrenciesInfoUseCase
 ): ViewModel() {
-    val uiState: StateFlow<ResultData<List<CurrencyInfo>>> =
+    val uiState2: StateFlow<ResultData<List<CurrencyInfo>>> =
         getCurrenciesInfoUseCase()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(10000),
                 initialValue = ResultData.Loading
             )
+    val uiState = getCurrenciesInfoUseCase()
+        .map { result ->
+            when (result) {
+                is ResultData.Loading -> OptionUiState(isLoading = true)
+                is ResultData.Success -> OptionUiState(options = result.data)
+                is ResultData.Failure -> OptionUiState(error = "Error al cargar datos")
+            }
+        }
+//        .stateIn(
+//            scope = viewModelScope,
+//            started = SharingStarted.Eagerly,
+//            initialValue = OptionUiState()
+//        )
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(10000),
+            initialValue = OptionUiState()
+        )
 }
-//    val uiState = getCurrenciesInfoUseCase()
-//        .map { result ->
-//            when (result) {
-//                is ResultData.Loading -> OptionUiState(isLoading = true)
-//                is ResultData.Success -> OptionUiState(options = result.data)
-//                is ResultData.Failure -> OptionUiState(error = "Error al cargar datos")
-//            }
-//        }
-//        .stateIn(viewModelScope, SharingStarted.Eagerly, OptionUiState())

@@ -2,6 +2,7 @@ package com.gbreagan.challenge.exchange.data.datasource.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.gbreagan.challenge.exchange.data.datasource.local.entity.OperationEntity
 
@@ -13,6 +14,6 @@ interface OperationDao {
     @Query("SELECT * FROM operation ORDER BY timestamp ASC")
     suspend fun selectAll(): List<OperationEntity>
 
-    @Insert
+    @Insert(OperationEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOne(operation: OperationEntity)
 }

@@ -5,8 +5,3 @@ data class CurrencyInfo(
     val name: String,
     val rate: Double
 )
-
-data class CurrencyRate(
-    val code: String,
-    val rate: String,
-)

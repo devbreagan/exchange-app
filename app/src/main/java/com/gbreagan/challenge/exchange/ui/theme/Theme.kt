@@ -66,6 +66,7 @@ fun ExchangeTheme(
 object BankStyles {
     val colorPositive: Color = Color(0xFF00B407)
     val colorNegative: Color = Color(0xFFFF0000)
+    val colorNeutral: Color = Color(0xFF404F66)
 
     @Composable
     fun textDefault() = TextStyle(

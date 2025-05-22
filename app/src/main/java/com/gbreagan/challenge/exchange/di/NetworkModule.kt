@@ -36,7 +36,6 @@ val networkModule = module {
 
     single<OkHttpClient> {
         OkHttpClient.Builder()
-//            .hostnameVerifier { _, _ -> true }
             .addInterceptor(interceptor = get<Interceptor>(named("apikey")))
             .addInterceptor(interceptor = get<HttpLoggingInterceptor>(named("logging")))
             .build()
