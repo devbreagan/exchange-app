@@ -13,7 +13,7 @@ val dataBaseModule = module {
             get<Context>(),
             ExchangeDatabase::class.java,
             "exchange.db"
-        ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
+        ).build()
     }
 
     single<SymbolDao> {

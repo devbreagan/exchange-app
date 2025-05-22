@@ -23,7 +23,7 @@ class ExchangeRepositoryImpl(
             val exchangeRates = symbolsEntity.toCurrencyInfoList(ratesDto)
             ResultData.Success(exchangeRates)
         } catch (e: Exception) {
-            ResultData.Failure(e)
+            ResultData.Failure(Throwable("Unknown error"))
         }
     }
 
@@ -36,7 +36,7 @@ class ExchangeRepositoryImpl(
             localDataSource.saveSymbols(symbolsEntity)
             ResultData.Success(true)
         } catch (e: Exception) {
-            ResultData.Failure(e)
+            ResultData.Failure(Throwable("Database error"))
         }
     }
 
@@ -46,7 +46,7 @@ class ExchangeRepositoryImpl(
             localDataSource.saveOperation(operation.toEntity())
             ResultData.Success(true)
         } catch (e: Exception) {
-            ResultData.Failure(e)
+            ResultData.Failure(Throwable("Database error"))
         }
     }
 
@@ -55,7 +55,7 @@ class ExchangeRepositoryImpl(
             val operations = localDataSource.getOperations().map { it.toModel() }
             ResultData.Success(operations)
         } catch (e: Exception) {
-            ResultData.Failure(e)
+            ResultData.Failure(Throwable("Database error"))
         }
     }
 }

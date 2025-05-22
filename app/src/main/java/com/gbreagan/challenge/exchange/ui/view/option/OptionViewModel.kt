@@ -20,7 +20,7 @@ class OptionViewModel(
             _uiState.value = _uiState.value.copy(isLoading = true)
             when (val result = getCurrenciesInfoUseCase()) {
                 is ResultData.Success -> {
-                    _uiState.value = OptionUiState(options = result.data)
+                    _uiState.value = OptionUiState(options = result.data, filteredOptions = result.data)
                 }
                 is ResultData.Failure -> {
                     _uiState.value = OptionUiState(error = "Error al cargar datos")
@@ -30,5 +30,18 @@ class OptionViewModel(
                 }
             }
         }
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        val filtered = if (query.isBlank())
+            _uiState.value.options
+         else _uiState.value.options.filter {
+            it.name.contains(query.trim(), ignoreCase = true) ||
+                    it.code.contains(query.trim(), ignoreCase = true)
+        }
+        _uiState.value = _uiState.value.copy(
+            searchQuery = query,
+            filteredOptions = filtered
+        )
     }
 }

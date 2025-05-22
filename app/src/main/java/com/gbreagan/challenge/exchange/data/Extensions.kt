@@ -2,6 +2,8 @@ package com.gbreagan.challenge.exchange.data
 
 import android.content.Context
 import java.util.Locale
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 fun Context.loadJsonFromAsset(fileName: String): String? {
     return try {
@@ -17,4 +19,8 @@ fun Double?.toTwoDecimalString(default: String = "-.--"): String {
 }
 fun String.isValidDecimal(): Boolean {
     return this.isEmpty() || this.matches(Regex("^\\d*(\\.\\d*)?\$"))
+}
+fun Double.round(decimals: Int): Double {
+    val factor = 10.0.pow(decimals)
+    return (this * factor).roundToInt() / factor
 }

@@ -1,5 +1,6 @@
 package com.gbreagan.challenge.exchange.domain.usecase
 
+import com.gbreagan.challenge.exchange.data.round
 import com.gbreagan.challenge.exchange.domain.model.CurrencyInfo
 
 class ConvertCurrencyUseCase {
@@ -20,6 +21,6 @@ class ConvertCurrencyUseCase {
     ): Double? {
         val fromRate = rates.find { it.code == from }?.rate
         val toRate = rates.find { it.code == to }?.rate
-        return if (fromRate != null && toRate != null) (toRate / fromRate) * amount else null
+        return if (fromRate != null && toRate != null) ((toRate / fromRate) * amount).round(2) else null
     }
 }

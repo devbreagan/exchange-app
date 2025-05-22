@@ -12,7 +12,7 @@ val localProperties = rootProject.file("local.properties")
     .takeIf { it.exists() }
     ?.inputStream()
     ?.use { Properties().apply { load(it) } }
-val apiKey = localProperties?.getProperty("API_KEY") ?: ""
+val apiKey = localProperties?.getProperty("API_KEY") ?: "685124b30d15f4bcdb8e7fbcfcb7f299" // default - for dev
 
 android {
     namespace = "com.gbreagan.challenge.exchange"
@@ -101,11 +101,14 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    //test
     testImplementation(libs.junit)
+    testImplementation(libs.junit)
+    testImplementation(libs.slf4j.simple)
+    testImplementation (libs.mockk)
+    testImplementation (libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.koin.test)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

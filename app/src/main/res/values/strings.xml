@@ -10,4 +10,5 @@
     <string name="start_operation">Empieza tu operación</string>
     <string name="buy_price">Compra: </string>
     <string name="sell_price">Venta: </string>
+    <string name="label_search">Buscar moneda...</string>
 </resources>

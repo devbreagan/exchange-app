@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gbreagan.challenge.exchange.core.result.ResultData
 import com.gbreagan.challenge.exchange.domain.usecase.SaveSymbolsUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
@@ -16,7 +17,7 @@ class SplashViewModel(
 
     fun loadData() {
         viewModelScope.launch {
-            //delay(SplashConstants.SPLASH_DELAY_MS)
+            delay(SplashConstants.SPLASH_DELAY_MS)
             when (val result = saveSymbolsUseCase()) {
                 is ResultData.Success -> {
                     _uiState.value = SplashUiState.Success

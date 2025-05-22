@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.gbreagan.challenge.exchange.R
 import com.gbreagan.challenge.exchange.ui.component.BankButton
+import com.gbreagan.challenge.exchange.ui.theme.BankStyles
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -164,6 +165,13 @@ fun HomeScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
+                if (uiState.error != null) {
+                    Text(
+                        text = uiState.error.orEmpty(),
+                        color = BankStyles.colorNegative,
+                        style = BankStyles.textBodyMedium()
+                    )
+                }
                 Button(
                     onClick = {
                         viewModel.convertCurrency(selectedCurrencySend, selectedCurrencyReceive)
