@@ -41,7 +41,7 @@ fun OptionScreen(
     onItemSelected: (String, String) -> Unit,
     onBackPressed: () -> Unit
 ) {
-    val viewModel : OptionViewModel = koinViewModel()
+    val viewModel: OptionViewModel = koinViewModel()
     val uiState by viewModel.uiState//.collectAsState()
 
     LaunchedEffect(Unit) { viewModel.loadOptions() }
@@ -70,13 +70,15 @@ fun OptionScreen(
             modifier = Modifier
                 .padding(it)
         ) {
-            when  {
+            when {
                 uiState.isLoading -> {
                     BankLoader()
                 }
+
                 uiState.error != null -> {
                     BankErrorPage()
                 }
+
                 uiState.options.isNotEmpty() -> {
                     val rates = uiState.filteredOptions
                     OutlinedTextField(

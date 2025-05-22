@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "symbol")
-data class SymbolsEntity (
+data class SymbolsEntity(
     @PrimaryKey
     val code: String,
     val name: String,

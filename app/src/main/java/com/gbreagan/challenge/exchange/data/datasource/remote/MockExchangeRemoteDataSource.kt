@@ -9,7 +9,7 @@ import okio.IOException
 
 class MockExchangeRemoteDataSource(
     private val context: Context
-): ExchangeRemoteDataSource {
+) : ExchangeRemoteDataSource {
     override suspend fun getRates(): ExchangeRateDto {
         val json = context.loadJsonFromAsset("rates.json")
             ?: throw IOException("JSON de mock no encontrado")

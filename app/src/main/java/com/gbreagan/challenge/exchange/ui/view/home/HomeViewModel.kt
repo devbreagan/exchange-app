@@ -22,13 +22,15 @@ class HomeViewModel(
 
     fun convertCurrency(from: String, to: String) {
         viewModelScope.launch {
-            when(val result = getCurrenciesInfoUseCase()) {
+            when (val result = getCurrenciesInfoUseCase()) {
                 is ResultData.Failure -> {
                     _uiState.value = HomeUiState(error = result.exception.message.toString())
                 }
+
                 is ResultData.Loading -> {
                     _uiState.value = HomeUiState(isLoading = true)
                 }
+
                 is ResultData.Success -> {
                     val converted = convertCurrencyUseCase(
                         from = from,

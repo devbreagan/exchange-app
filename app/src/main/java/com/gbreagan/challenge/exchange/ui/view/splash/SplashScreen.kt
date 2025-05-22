@@ -37,11 +37,13 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
                     LaunchedEffect(Unit) { viewModel.loadData() }
                     LogoAnimation()
                 }
+
                 is SplashUiState.Error -> {
                     LaunchedEffect(Unit) {
                         onSplashFinished()
                     }
                 }
+
                 is SplashUiState.Success -> {
                     LaunchedEffect(Unit) {
                         onSplashFinished()

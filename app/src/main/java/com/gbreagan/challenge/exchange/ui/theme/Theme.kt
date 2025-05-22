@@ -74,24 +74,31 @@ object BankStyles {
         lineHeight = 22.sp,
         fontWeight = FontWeight.W600
     )
+
     @Composable
     fun textBodySmall() = MaterialTheme.typography.bodySmall
+
     @Composable
     fun textBodyMedium() = MaterialTheme.typography.bodyMedium
+
     @Composable
     fun textBodyLarge() = MaterialTheme.typography.bodyLarge
 
     @Composable
     fun textTitleSmall() = MaterialTheme.typography.titleSmall
+
     @Composable
     fun textTitleMedium() = MaterialTheme.typography.titleMedium
+
     @Composable
     fun textTitleLarge() = MaterialTheme.typography.titleLarge
 
     @Composable
     fun textHeadSmall() = MaterialTheme.typography.headlineSmall
+
     @Composable
     fun textHeadMedium() = MaterialTheme.typography.headlineMedium
+
     @Composable
     fun textHeadLarge() = MaterialTheme.typography.headlineLarge
 }

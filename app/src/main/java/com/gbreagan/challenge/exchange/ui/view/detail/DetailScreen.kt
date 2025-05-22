@@ -64,6 +64,7 @@ fun DetailScreen(
                 uiState.isLoading -> {
                     BankLoader()
                 }
+
                 uiState.operations.isNotEmpty() -> {
                     val operations = uiState.operations
                     LazyColumn(
@@ -86,6 +87,7 @@ fun DetailScreen(
                         }
                     }
                 }
+
                 uiState.error != null -> {
                     BankErrorPage()
                 }

@@ -5,7 +5,7 @@ import com.gbreagan.challenge.exchange.data.datasource.remote.dto.SymbolsDto
 
 class ExchangeRemoteDataSourceImpl(
     private val exchangeApiService: ExchangeApiService
-): ExchangeRemoteDataSource {
+) : ExchangeRemoteDataSource {
     override suspend fun getRates(): ExchangeRateDto =
         exchangeApiService.getRates()
 

@@ -13,13 +13,16 @@ fun Context.loadJsonFromAsset(fileName: String): String? {
         null
     }
 }
+
 fun Double?.orZero(): Double = this ?: 0.0
 fun Double?.toTwoDecimalString(default: String = "-.--"): String {
     return this?.let { String.format(Locale.ROOT, "%.2f", it) } ?: default
 }
+
 fun String.isValidDecimal(): Boolean {
     return this.isEmpty() || this.matches(Regex("^\\d*(\\.\\d*)?\$"))
 }
+
 fun Double.round(decimals: Int): Double {
     val factor = 10.0.pow(decimals)
     return (this * factor).roundToInt() / factor

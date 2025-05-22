@@ -22,9 +22,11 @@ class SplashViewModel(
                 is ResultData.Success -> {
                     _uiState.value = SplashUiState.Success
                 }
+
                 is ResultData.Failure -> {
                     _uiState.value = SplashUiState.Error(result.exception.message.toString())
                 }
+
                 is ResultData.Loading -> SplashUiState.Loading
             }
         }

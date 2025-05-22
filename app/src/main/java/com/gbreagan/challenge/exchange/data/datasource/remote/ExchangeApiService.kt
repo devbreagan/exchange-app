@@ -7,6 +7,7 @@ import retrofit2.http.GET
 interface ExchangeApiService {
     @GET("latest")
     suspend fun getRates(): ExchangeRateDto
+
     @GET("symbols")
     suspend fun getSymbols(): SymbolsDto
 }

@@ -22,9 +22,11 @@ class DetailViewModel(
                 is ResultData.Success -> {
                     _uiState.value = DetailUiState(operations = result.data)
                 }
+
                 is ResultData.Failure -> {
                     _uiState.value = DetailUiState(error = "Error al cargar datos")
                 }
+
                 is ResultData.Loading -> {
                     _uiState.value = DetailUiState(isLoading = true)
                 }

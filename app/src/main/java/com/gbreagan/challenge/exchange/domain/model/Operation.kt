@@ -1,6 +1,6 @@
 package com.gbreagan.challenge.exchange.domain.model
 
-data class Operation (
+data class Operation(
     val amountSend: Double,
     val amountReceive: Double,
     val from: String,

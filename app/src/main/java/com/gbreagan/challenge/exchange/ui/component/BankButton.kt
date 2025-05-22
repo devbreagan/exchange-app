@@ -22,7 +22,7 @@ import com.gbreagan.challenge.exchange.ui.theme.BankBlue
 @Composable
 fun BankButton(
     onLongClick: () -> Unit,
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
 ) {
     Surface(
@@ -32,7 +32,12 @@ fun BankButton(
                 onClick = {},
                 onLongClick = onLongClick,
             ),
-        shape = RoundedCornerShape(topStart = 0.dp, topEnd = 8.dp, bottomStart = 0.dp, bottomEnd = 8.dp),
+        shape = RoundedCornerShape(
+            topStart = 0.dp,
+            topEnd = 8.dp,
+            bottomStart = 0.dp,
+            bottomEnd = 8.dp
+        ),
         color = BankBlue
     ) {
         Row(
