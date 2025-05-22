@@ -6,7 +6,7 @@ import com.gbreagan.challenge.exchange.domain.model.Operation
 import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRepository {
-    fun getCurrencyInfoList(): Flow<ResultData<List<CurrencyInfo>>>
+    suspend fun getCurrencyInfoList(): ResultData<List<CurrencyInfo>>
     fun setSymbolsToLocal(): Flow<ResultData<Boolean>>
     fun saveOperation(operation: Operation): Flow<ResultData<Boolean>>
     fun getOperations(): Flow<ResultData<List<Operation>>>

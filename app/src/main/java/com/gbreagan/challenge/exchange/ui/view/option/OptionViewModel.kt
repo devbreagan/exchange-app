@@ -1,41 +1,34 @@
 package com.gbreagan.challenge.exchange.ui.view.option
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gbreagan.challenge.exchange.core.result.ResultData
-import com.gbreagan.challenge.exchange.domain.model.CurrencyInfo
 import com.gbreagan.challenge.exchange.domain.usecase.GetCurrenciesInfoUseCase
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class OptionViewModel(
     private val getCurrenciesInfoUseCase: GetCurrenciesInfoUseCase
-): ViewModel() {
-    val uiState2: StateFlow<ResultData<List<CurrencyInfo>>> =
-        getCurrenciesInfoUseCase()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(10000),
-                initialValue = ResultData.Loading
-            )
-    val uiState = getCurrenciesInfoUseCase()
-        .map { result ->
-            when (result) {
-                is ResultData.Loading -> OptionUiState(isLoading = true)
-                is ResultData.Success -> OptionUiState(options = result.data)
-                is ResultData.Failure -> OptionUiState(error = "Error al cargar datos")
+) : ViewModel() {
+
+    private val _uiState = mutableStateOf(OptionUiState())
+    val uiState: State<OptionUiState> = _uiState
+
+    fun loadOptions() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            when (val result = getCurrenciesInfoUseCase()) {
+                is ResultData.Success -> {
+                    _uiState.value = OptionUiState(options = result.data)
+                }
+                is ResultData.Failure -> {
+                    _uiState.value = OptionUiState(error = "Error al cargar datos")
+                }
+                is ResultData.Loading -> {
+                    _uiState.value = OptionUiState(isLoading = true)
+                }
             }
         }
-//        .stateIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Eagerly,
-//            initialValue = OptionUiState()
-//        )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(10000),
-            initialValue = OptionUiState()
-        )
+    }
 }

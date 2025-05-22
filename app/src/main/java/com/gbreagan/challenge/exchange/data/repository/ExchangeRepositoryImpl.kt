@@ -20,15 +20,14 @@ class ExchangeRepositoryImpl(
     private val remoteDataSource: ExchangeRemoteDataSource,
     private val localDataSource: ExchangeLocalDataSource,
 ) : ExchangeRepository {
-    override fun getCurrencyInfoList(): Flow<ResultData<List<CurrencyInfo>>> = flow {
-        emit(ResultData.Loading)
-        try {
+    override suspend fun getCurrencyInfoList(): ResultData<List<CurrencyInfo>> {
+        return try {
             val symbolsEntity: List<SymbolsEntity> = localDataSource.getSymbols()
             val ratesDto: ExchangeRateDto = remoteDataSource.getRates()
             val exchangeRates = symbolsEntity.toCurrencyInfoList(ratesDto)
-            emit(ResultData.Success(exchangeRates))
+            ResultData.Success(exchangeRates)
         } catch (e: Exception) {
-            emit(ResultData.Failure(e))
+            ResultData.Failure(e)
         }
     }
 

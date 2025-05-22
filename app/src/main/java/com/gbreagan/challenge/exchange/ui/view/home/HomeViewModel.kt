@@ -23,38 +23,36 @@ class HomeViewModel(
 
     fun convertCurrency(from: String, to: String) {
         viewModelScope.launch {
-            getCurrenciesInfoUseCase().collect {
-                when (it) {
-                    is ResultData.Success -> {
-                        val converted = convertCurrencyUseCase(
+            when(val result = getCurrenciesInfoUseCase()) {
+                is ResultData.Failure -> {
+                    _uiState.value = HomeUiState(error = result.exception.message.toString())
+                }
+                is ResultData.Loading -> {
+                    _uiState.value = HomeUiState(isLoading = true)
+                }
+                is ResultData.Success -> {
+                    val converted = convertCurrencyUseCase(
+                        from = from,
+                        to = to,
+                        amount = _uiState.value.amountToSend.toDouble(),
+                        rates = result.data
+                    )
+                    _uiState.value = _uiState.value.copy(
+                        amountToReceive = converted.toTwoDecimalString(),
+                        isLoading = false
+                    )
+                    if (converted != null) {
+                        saveOperationUseCase(
+                            amountSend = _uiState.value.amountToSend.toDouble(),
+                            amountReceive = converted,
                             from = from,
-                            to = to,
-                            amount = _uiState.value.amountToSend.toDouble(),
-                            rates = it.data
-                        )
-                        _uiState.value = _uiState.value.copy(
-                            amountToReceive = converted.toTwoDecimalString(),
-                            isLoading = false
-                        )
-                        if (converted != null) {
-                            saveOperationUseCase(
-                                amountSend = _uiState.value.amountToSend.toDouble(),
-                                amountReceive = converted,
-                                from = from,
-                                to = to
-                            ).collect()
-                        }
-                        _uiState.value = HomeUiState(
-                            amountToSend = _uiState.value.amountToSend,
-                            amountToReceive = converted.toTwoDecimalString(),
-                        )
+                            to = to
+                        ).collect()
                     }
-                    is ResultData.Failure -> {
-                        _uiState.value = HomeUiState(error = it.exception.message.toString())
-                    }
-                    is ResultData.Loading -> {
-                        //_uiState.value = _uiState.value.copy(isLoading = true)
-                    }
+                    _uiState.value = HomeUiState(
+                        amountToSend = _uiState.value.amountToSend,
+                        amountToReceive = converted.toTwoDecimalString(),
+                    )
                 }
             }
         }
